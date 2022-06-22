@@ -9,32 +9,32 @@ import java.util.Scanner;
 public class StudentView {
 
     private final StudentService studentService;
-    private Scanner input = new Scanner(System.in);
+    private final Scanner input = new Scanner(System.in);
 
     public StudentView() {
         studentService = StudentService.getInstance();
     }
 
     public void showStudentsList() {
-        System.out.println("---------------------------------- STUDENT LIST---------------------------------- \n");
+        System.out.println("---------------------------------- STUDENT LIST---------------------------------------- \n");
         System.out.printf("%-15s %-20s %-12s %-12s %-12s %-15s \n", "ID", "Full Name", "Age", "Gender", "Address", "Average Score");
-        System.out.println("---------------------------------------------------------------------------------");
+        System.out.println("---------------------------------------------------------------------------------------");
         for (Student student : studentService.findAll()) {
             System.out.printf("%-15s %-20s %-12s %-12s %-12s %-15s \n", student.getId(), student.getFullName(), student.getAge(), student.getGender(), student.getAddress(), student.getAverageScore());
         }
-        System.out.println("---------------------------------------------------------------------------------");
+        System.out.println("---------------------------------------------------------------------------------------");
         System.out.println();
 
     }
 
     public void showSortStudent(List<Student> students) {
-        System.out.println("---------------------------------- STUDENT SORT LIST---------------------------------- \n");
+        System.out.println("---------------------------------- STUDENT SORT LIST------------------------------------- \n");
         System.out.printf("%-15s %-20s %-12s %-12s %-12s %-15s \n", "ID", "Full Name", "Age", "Gender", "Address", "Average Score");
-        System.out.println("--------------------------------------------------------------------------------------");
+        System.out.println("-----------------------------------------------------------------------------------------");
         for (Student student : students) {
             System.out.printf("%-15s %-20s %-12s %-12s %-12s %-15s \n", student.getId(), student.getFullName(), student.getAge(), student.getGender(), student.getAddress(), student.getAverageScore());
         }
-        System.out.println("--------------------------------------------------------------------------------------");
+        System.out.println("-----------------------------------------------------------------------------------------");
         System.out.println();
     }
 
@@ -58,6 +58,10 @@ public class StudentView {
 
             System.out.println("Input age student ");
             int age = Integer.parseInt(input.nextLine());
+            while (age <= 0) {
+                System.out.println("Wrong Input. Age > 0. Try again. ");
+                age = input.nextInt();
+            }
 
             System.out.println("Input gender student");
             String gender = input.nextLine();
@@ -66,7 +70,11 @@ public class StudentView {
             String address = input.nextLine();
 
             System.out.println("Input Average Score");
-            double averageScore = input.nextDouble();
+            double averageScore = Double.parseDouble(input.nextLine());
+            while (averageScore <= 0.0) {
+                System.out.println("AVR Score > 0. Input again. ");
+                averageScore = input.nextDouble();
+            }
 
             studentService.add(new Student(fullName, age, gender, address, averageScore));
             System.out.println("ADD STUDENT SUCCESSFULLY.");
@@ -77,7 +85,6 @@ public class StudentView {
         }
     }
 
-    
     public void update() {
 
         studentService.findAll();
@@ -95,6 +102,7 @@ public class StudentView {
             System.out.println("------------------------");
             System.out.println("Input number to edit product");
             int choice = input.nextInt();
+            input.nextLine();
             try {
                 switch (choice) {
                     case 1:
@@ -136,7 +144,6 @@ public class StudentView {
                         studentService.update(student);
                         System.out.println("Successfully updated AVRScore");
                         break;
-
                     default:
                         System.out.println("Wrong choice ! Try again .");
                         update();
